@@ -1,0 +1,16 @@
+{
+  "name": "is-sample",
+  "version": "1.0.0",
+  "description": "sample code",
+  "scripts": {
+    "start": "node src/main.js"
+  },
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.5.5",
+    "@grpc/proto-loader": "^0.6.9",
+    "dotenv": "^16.0.0"
+  },
+  "devDependencies": {
+  }
+}
