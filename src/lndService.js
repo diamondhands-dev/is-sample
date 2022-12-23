@@ -58,6 +58,35 @@ const lndService = {
       });
     });
   },
+  addInvoice(value, memo) {
+    const request = {
+      memo,
+      value,
+    };
+    return new Promise((resolve, reject) => {
+      lightning.addInvoice(request, (error, response) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(response);
+      });
+    });
+  },
+  subscribeSingleInvoice(r_hash, res) {
+    const request = {
+      r_hash,
+    };
+    const call = invoices.subscribeSingleInvoice(request);
+    console.log('SubscribeSingleInvoice');
+    call.on('data', async function (response) {
+      // A response was received from the server.
+      console.log(response.state);
+    });
+    call.on('end', async function () {
+      // The server has closed the stream.
+      console.log('The server has closed the stream.');
+    });
+  },
 };
 
 module.exports = lndService;
