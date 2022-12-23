@@ -60,8 +60,8 @@ const lndService = {
   },
   addInvoice(value, memo) {
     const request = {
-      memo,
-      value,
+      value: value,
+      memo: memo,
     };
     return new Promise((resolve, reject) => {
       lightning.addInvoice(request, (error, response) => {
@@ -81,6 +81,16 @@ const lndService = {
     call.on('data', async function (response) {
       // A response was received from the server.
       console.log(response.state);
+      if (response.state == 'ACCEPTED') {
+        // Handle business logic
+        // 1. Claim NFT to Buyer
+        // 2. Send Bitcoin to Seller
+        // 3. Request to settle/cancel invoice
+        // Cancel invoice
+        // lndService.cancelInvoice(global.payment_hash);
+        // Settle invoice
+        lndService.settleInvoice(global.preimage);
+      }
     });
     call.on('end', async function () {
       // The server has closed the stream.
@@ -100,6 +110,51 @@ const lndService = {
         return resolve(response);
       });
     });
+  },
+  addHoldInvoice(value, memo, payment_hash) {
+    const request = {
+      value: value,
+      memo: memo,
+      hash: payment_hash,
+    };
+    return new Promise((resolve, reject) => {
+      invoices.addHoldInvoice(request, (error, response) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(response);
+      });
+    });
+  },
+  cancelInvoice(payment_hash) {
+    const request = {
+      payment_hash: Buffer.from(payment_hash, 'hex'),
+    };
+    return new Promise((resolve, reject) => {
+      invoices.cancelInvoice(request, (error, response) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(response);
+      });
+    });
+  },
+  settleInvoice(preimage) {
+    const request = {
+      preimage: Buffer.from(preimage, 'hex'),
+    };
+    return new Promise((resolve, reject) => {
+      invoices.settleInvoice(request, (error, response) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(response);
+      });
+    });
+  },
+  async genHash(preimage) {
+    const hash = crypto.createHash('sha256').update(preimage).digest('hex');
+    return hash;
   },
 };
 
