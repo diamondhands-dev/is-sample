@@ -87,6 +87,20 @@ const lndService = {
       console.log('The server has closed the stream.');
     });
   },
+  sendCoins(addr, amount) {
+    const request = {
+      addr,
+      amount,
+    };
+    return new Promise((resolve, reject) => {
+      lightning.sendCoins(request, (error, response) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(response);
+      });
+    });
+  },
 };
 
 module.exports = lndService;
