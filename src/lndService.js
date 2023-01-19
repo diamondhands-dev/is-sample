@@ -116,6 +116,7 @@ const lndService = {
       value: value,
       memo: memo,
       hash: payment_hash,
+      private: true,
     };
     return new Promise((resolve, reject) => {
       invoices.addHoldInvoice(request, (error, response) => {
