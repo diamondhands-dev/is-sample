@@ -127,6 +127,19 @@ const lndService = {
       });
     });
   },
+  lookupInvoiceV2(payment_hash) {
+    const request = {
+      payment_hash,
+    };
+    return new Promise((resolve, reject) => {
+      invoices.lookupInvoiceV2(request, (error, response) => {
+        if (error) {
+          return reject(error);
+        }
+        return resolve(response);
+      });
+    });
+  },
   cancelInvoice(payment_hash) {
     const request = {
       payment_hash: Buffer.from(payment_hash, 'hex'),

@@ -7,7 +7,10 @@ getinfo();
 // Uncomment below to get an invoice.
 // main();
 // sendCoins();
-// getInvoice();
+//getInvoice();
+
+const payment_hash = '2b30a0126221d30f7fd6f529722ff8d4cb27102cf4cb8b28708f89b35bf7fe40';
+getInvoiceState(payment_hash);
 
 async function getinfo() {
   const info = await lndService.getInfo();
@@ -48,4 +51,10 @@ async function getInvoice() {
   console.log(`Pay this invoice: ${holdinvoice.payment_request}`);
   // Subscribe an invoice
   lndService.subscribeSingleInvoice(Buffer.from(payment_hash, 'hex'));
+}
+
+async function getInvoiceState(payment_hash) {
+  const invoice_state = await lndService.lookupInvoiceV2(Buffer.from(payment_hash, 'hex'));
+  // InvoiceState: OPEN, SETTLED, CANCELED, ACCEPTED
+  console.log(`invoice state: ${invoice_state.state}`);
 }
